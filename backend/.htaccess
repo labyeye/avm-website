@@ -1,0 +1,27 @@
+# Apache config (php -S ignores this file)
+Options -Indexes
+
+<IfModule mod_headers.c>
+  Header always set Access-Control-Allow-Origin "http://localhost:5173"
+  Header always set Access-Control-Allow-Credentials "true"
+  Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+  Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+</IfModule>
+
+# Block direct access to env files and config helpers
+<FilesMatch "^\.env">
+  Require all denied
+</FilesMatch>
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^config/ - [F,L]
+  RewriteRule ^middleware/ - [F,L]
+  # Pass Authorization/PUT bodies straight through; OPTIONS answered by PHP
+</IfModule>
+
+# Uploaded files must never execute as scripts
+<IfModule mod_php.c>
+  <Directory "uploads">
+    php_flag engine off
+  </Directory>
+</IfModule>

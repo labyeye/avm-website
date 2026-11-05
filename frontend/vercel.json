@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/backend/:path*", "destination": "https://YOUR-BACKEND-HOST/backend/:path*" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

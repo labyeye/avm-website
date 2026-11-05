@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { scroll-behavior: smooth; }
+
+/* Masonry columns drift by exactly one copy of their content (--shift is measured in JS). */
+@keyframes colShift { to { transform: translateY(var(--shift)); } }
+
+html, body { overflow-x: clip; }
+body { @apply font-sans text-white bg-navy-700 antialiased; }
+
+@layer components {
+  .section { @apply px-4 py-14 md:px-10 lg:px-20; }
+  .btn-gold { @apply inline-flex items-center justify-center gap-2 rounded-lg bg-gold-500 px-4 py-2 text-sm font-semibold text-navy-950 transition hover:bg-gold-400 disabled:opacity-60; }
+  .btn-ghost { @apply inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50; }
+  .btn-danger { @apply inline-flex items-center justify-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700 disabled:opacity-60; }
+  .field { @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/30; }
+  .lift { @apply transition duration-300 ease-out hover:-translate-y-2 hover:shadow-2xl hover:shadow-black/30; }
+  .label { @apply mb-1 block text-xs font-semibold text-slate-600; }
+}
