@@ -4,7 +4,13 @@ import { Menu, X, GraduationCap, Box, ChevronDown, ChevronRight, Download } from
 import { asset, withFallback } from '../../api/assets';
 import { NAV } from '../../api/navConfig';
 import { getPage, downloadUrl } from '../../api/public';
+import useLive from '../../api/useLive';
 import avmlogo from "../../assets/logo.png";
+const LiveLabel = () => (
+  <span className="flex items-center gap-1.5 rounded-full bg-red-600 px-3 py-1 text-xs font-bold tracking-wider text-white">
+    <span className="h-2 w-2 animate-pulse rounded-full bg-white" /> LIVE
+  </span>
+);
 const linkCls = ({ isActive }) =>
   `whitespace-nowrap text-[13px] font-medium transition hover:text-gold-400 ${isActive ? 'text-gold-400' : 'text-white/90'}`;
 
@@ -36,7 +42,10 @@ function useNav() {
         .catch(() => { delete dynamicCache[i.dynamicFrom]; });
     });
   }, []);
-  return NAV.map((i) => (i.dynamicFrom && dynamicCache[i.dynamicFrom]?.length ? { ...i, children: dynamicCache[i.dynamicFrom] } : i));
+  const live = useLive();
+  const items = NAV.map((i) => (i.dynamicFrom && dynamicCache[i.dynamicFrom]?.length ? { ...i, children: dynamicCache[i.dynamicFrom] } : i));
+  // Red LIVE entry right after Contact Us while a stream is on.
+  return live.active ? [...items, { label: 'Live', to: '/live', live: true }] : items;
 }
 
 // Desktop dropdown panel; items with children open a submenu to the right (recursive).
@@ -68,14 +77,22 @@ function MobileItem({ item, depth = 0, close }) {
       <div className="flex items-center border-b border-white/5" style={{ paddingLeft: depth * 16 }}>
         {item.href
           ? <a href={item.href} target="_blank" rel="noopener noreferrer" onClick={close} className={`flex-1 py-3 ${linkCls({ isActive: false })} !whitespace-normal`}>{item.label}</a>
-          : <NavLink to={item.to} end={item.to === '/'} onClick={close} className={(s) => `flex-1 py-3 ${linkCls(s)} !whitespace-normal`}>{item.label}</NavLink>}
+          : <NavLink to={item.to} end={item.to === '/'} onClick={close} className={(s) => `flex-1 py-3 ${linkCls(s)} !whitespace-normal`}>{item.live ? <LiveLabel /> : item.label}</NavLink>}
         {item.children && (
           <button className="p-3" aria-label={`Toggle ${item.label}`} aria-expanded={open} onClick={() => setOpen(!open)}>
             <ChevronDown size={16} className={`transition ${open ? 'rotate-180' : ''}`} />
           </button>
         )}
       </div>
-      {item.children && open && item.children.map((c) => <MobileItem key={c.key ?? c.to} item={c} depth={depth + 1} close={close} />)}
+      {item.children && (
+        <div className={`grid transition-[grid-template-rows] duration-300 ease-out ${open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+          <div className="min-h-0 overflow-hidden">
+            <div className={`transition duration-300 ease-out ${open ? 'translate-x-0 opacity-100' : '-translate-x-6 opacity-0'}`}>
+              {item.children.map((c) => <MobileItem key={c.key ?? c.to} item={c} depth={depth + 1} close={close} />)}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -107,7 +124,7 @@ export default function Navbar() {
           {nav.map((item) => (
             <div key={item.label} className="group/item relative py-3">
               <NavLink to={item.to} end={item.to === '/'} className={(s) => `${linkCls(s)} flex items-center gap-1`}>
-                {item.label} {item.children && <ChevronDown size={12} />}
+                {item.live ? <LiveLabel /> : item.label} {item.children && <ChevronDown size={12} />}
               </NavLink>
               {item.children && <Panel items={item.children} />}
             </div>
@@ -121,12 +138,18 @@ export default function Navbar() {
         </button>
       </div>
 
-      {open && (
-        <div className="max-h-[80vh] overflow-y-auto border-t border-white/10 bg-navy-900 px-4 pb-4 xl:hidden">
-          {nav.map((item) => <MobileItem key={item.label} item={item} close={close} />)}
-          <div className="mt-3 flex flex-wrap gap-2">{badges}</div>
+      {/* Slide in / out: height animates via grid rows, content slides from the left. */}
+      <div
+        aria-hidden={!open}
+        className={`grid transition-[grid-template-rows,visibility] duration-300 ease-out xl:hidden ${open ? 'visible grid-rows-[1fr]' : 'invisible grid-rows-[0fr]'}`}
+      >
+        <div className="min-h-0 overflow-hidden">
+          <div className={`max-h-[80vh] overflow-y-auto border-t border-white/10 bg-navy-900 px-4 pb-4 transition duration-300 ease-out ${open ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'}`}>
+            {nav.map((item) => <MobileItem key={item.label} item={item} close={close} />)}
+            <div className="mt-3 flex flex-wrap gap-2">{badges}</div>
+          </div>
         </div>
-      )}
+      </div>
     </header>
   );
 }

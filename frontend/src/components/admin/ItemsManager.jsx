@@ -13,7 +13,12 @@ const ALL = {
   title: { label: 'Title', required: true },
   subtitle: { label: 'Subtitle / Role / Category' },
   description: { label: 'Description', textarea: true },
+  captain: { label: 'Captain name' },
+  captain_photo_url: { label: 'Captain photo', upload: true },
+  incharge: { label: 'In-charge name (teacher / coach)' },
+  incharge_photo_url: { label: 'In-charge photo', upload: true },
   image_url: { label: 'Image', upload: true },
+  team_photo_url: { label: 'Team photo', upload: true },
   file_url: { label: 'Document (PDF)', file: true },
   sort_order: { label: 'Sort Order', type: 'number' },
 };
@@ -27,12 +32,14 @@ const ICON_LABELS = {
 };
 
 // Recommended crop shape for each layout's image.
-const ASPECT = { slides: 16 / 9, cards: 3 / 2, tabs: 3 / 2, members: 1, profile: 1, items: 1 };
+const ASPECT = { slides: 16 / 9, sports: 3 / 2, leadership: 1, cards: 3 / 2, tabs: 3 / 2, members: 1, profile: 1, items: 1 };
 
 // Per-layout label overrides.
 const LAYOUT_LABELS = {
   tabs: { title: { label: 'Tab name (e.g. Library)' }, image_url: { label: 'Photo', upload: true } },
   profile: { title: { label: 'Name' }, subtitle: { label: 'Designation' }, image_url: { label: 'Photo', upload: true } },
+  sports: { title: { label: 'Name (e.g. Cricket)' }, subtitle: { label: 'Short tagline' }, description: { label: 'About this sport / activity', textarea: true }, image_url: { label: 'Card photo', upload: true } },
+  leadership: { title: { label: 'Student name' }, subtitle: { label: 'Position (e.g. Head Boy)' }, description: { label: 'Student details (class, house, about)', textarea: true }, image_url: { label: 'Student photo', upload: true } },
   embed: { title: { label: 'Title' }, file_url: { label: 'Tour / video link (YouTube or 360° tour URL)', file: true } },
 };
 
@@ -43,6 +50,8 @@ export const FIELDS_BY_LAYOUT = {
   tabs: ['title', 'description', 'image_url', 'sort_order'],
   embed: ['title', 'file_url'],
   slides: ['title', 'subtitle', 'image_url', 'sort_order'],
+  sports: ['title', 'subtitle', 'description', 'image_url', 'captain', 'captain_photo_url', 'incharge', 'incharge_photo_url', 'team_photo_url', 'sort_order'],
+  leadership: ['title', 'subtitle', 'description', 'image_url', 'sort_order'],
   cards: ['title', 'subtitle', 'description', 'image_url', 'sort_order'],
   members: ['title', 'subtitle', 'description', 'image_url', 'sort_order'],
   downloads: ['title', 'subtitle', 'file_url', 'sort_order'],
@@ -51,7 +60,7 @@ export const FIELDS_BY_LAYOUT = {
 export default function ItemsManager({ slug, layout = 'cards' }) {
   const toast = useToast();
   const fields = FIELDS_BY_LAYOUT[layout] || FIELDS_BY_LAYOUT.cards;
-  const blank = () => ({ page_slug: slug, title: '', subtitle: '', description: '', image_url: '', file_url: '', sort_order: 0, is_active: true });
+  const blank = () => ({ page_slug: slug, title: '', subtitle: '', description: '', captain: '', incharge: '', captain_photo_url: '', incharge_photo_url: '', team_photo_url: '', image_url: '', file_url: '', sort_order: 0, is_active: true });
   const [rows, setRows] = useState([]);
   const [form, setForm] = useState(null);
   const [deleting, setDeleting] = useState(null);
@@ -124,7 +133,7 @@ export default function ItemsManager({ slug, layout = 'cards' }) {
                     : f.file
                     ? <FileUpload value={form[k]} onChange={(u) => set(k, u)} />
                     : f.upload
-                    ? <ImageUpload aspect={ASPECT[layout]} value={form[k]} onChange={(u) => set(k, u)} />
+                    ? <ImageUpload aspect={k === 'captain_photo_url' || k === 'incharge_photo_url' ? 1 : k === 'team_photo_url' ? undefined : ASPECT[layout]} value={form[k]} onChange={(u) => set(k, u)} />
                     : f.textarea
                     ? <textarea rows={4} className="field" value={form[k] ?? ''} onChange={(e) => set(k, e.target.value)} />
                     : <input type={f.type || 'text'} className="field" required={f.required} value={form[k] ?? ''} onChange={(e) => set(k, e.target.value)} />}

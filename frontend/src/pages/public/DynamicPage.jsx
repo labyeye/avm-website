@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ChevronRight, Download, Eye, FileText } from "lucide-react";
+import { ChevronRight, Download, Eye, FileText, Maximize2, User, X } from "lucide-react";
 import SiteLayout from "../../components/public/SiteLayout";
 import RichText from "../../components/public/RichText";
 import ContactSection from "../../components/public/ContactSection";
@@ -8,6 +8,7 @@ import AdmissionForm from "../../components/public/AdmissionForm";
 import Reveal from "../../components/public/Reveal";
 import FacilityTabs from "../../components/public/FacilityTabs";
 import Testimonials, { youtubeId } from "../../components/public/Testimonials";
+import ZoomImage, { Lightbox } from "../../components/public/ZoomImage";
 import { NAV } from "../../api/navConfig";
 import { getPage, downloadPageUrl } from "../../api/public";
 import { placeholder } from "../../api/assets";
@@ -32,7 +33,7 @@ function Cards({ items }) {
         <Reveal key={it.id} {...stagger(i)}>
           <article className="lift h-full overflow-hidden rounded-2xl bg-white/10">
             {it.image_url && (
-              <img
+              <ZoomImage
                 src={it.image_url}
                 alt={it.title}
                 loading="lazy"
@@ -86,7 +87,7 @@ function SplitCards({ items }) {
           </div>
           <div className={i % 2 ? "md:order-1" : ""}>
             <Reveal from={i % 2 ? "left" : "right"}>
-            <img
+            <ZoomImage
                 src={it.image_url || placeholder(600, 400, it.title, "16346b")}
               alt={it.title}
               loading="lazy"
@@ -107,7 +108,7 @@ function Members({ items }) {
       {items.map((it, i) => (
         <Reveal key={it.id} {...stagger(i)}>
           <article className="lift rounded-2xl p-4 text-center">
-            <img
+            <ZoomImage
               src={it.image_url || placeholder(400, 400, "Photo", "16346b")}
               alt={it.title}
               loading="lazy"
@@ -182,7 +183,7 @@ function Profile({ person, image, body }) {
       {(photo || person) && (
         <Reveal from="left">
           <div className="lift rounded-2xl bg-white/10 p-5 text-center">
-            <img
+            <ZoomImage
               src={photo || placeholder(400, 400, "Photo", "16346b")}
               alt={person?.title || "Photo"}
               onError={imgFallback(400, 400, "Photo")}
@@ -199,6 +200,138 @@ function Profile({ person, image, body }) {
         <RichText text={body} className="text-[15px]" />
       </Reveal>
     </div>
+  );
+}
+
+
+// Sports / activities / student leadership: clickable cards that open a details modal.
+function DetailModal({ item, kind, onClose }) {
+  useEffect(() => {
+    const onKey = (e) => e.key === "Escape" && onClose();
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [onClose]);
+  const person = kind === "leadership";
+  const Row = ({ label, value, photo }) =>
+    value || photo ? (
+      <div className="flex items-center gap-3 rounded-xl bg-white/10 px-4 py-3">
+        {photo ? (
+          <ZoomImage
+            src={photo}
+            alt={value || label}
+            onError={imgFallback(200, 200, "Photo")}
+            className="h-16 w-16 shrink-0 rounded-full border-2 border-gold-500 object-cover object-top"
+          />
+        ) : (
+          <User size={18} className="shrink-0 text-gold-400" />
+        )}
+        <div>
+          <p className="text-xs uppercase tracking-wide text-gold-400">{label}</p>
+          <p className="font-semibold">{value}</p>
+        </div>
+      </div>
+    ) : null;
+  return (
+    <div
+      className="fixed inset-0 z-[90] flex items-center justify-center bg-black/70 p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label={item.title}
+      onClick={onClose}
+    >
+      <div
+        className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-navy-900 p-6 shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          aria-label="Close"
+          onClick={onClose}
+          className="absolute right-4 top-4 rounded-full bg-white/10 p-2 transition hover:bg-white/25"
+        >
+          <X size={20} />
+        </button>
+        <h3 className="pr-10 text-2xl font-bold md:text-3xl">{item.title}</h3>
+        {item.subtitle && <p className="mt-1 text-gold-400">{item.subtitle}</p>}
+
+        {person ? (
+          <div className="mt-5 grid gap-6 md:grid-cols-[240px_1fr]">
+            <ZoomImage
+              src={item.image_url || placeholder(400, 400, "Photo", "16346b")}
+              alt={item.title}
+              onError={imgFallback(400, 400, "Photo")}
+              className="aspect-square w-full rounded-2xl object-cover object-top"
+            />
+            <p className="whitespace-pre-line leading-7 text-white/85">{item.description}</p>
+          </div>
+        ) : (
+          <>
+            {item.description && (
+              <p className="mt-4 whitespace-pre-line leading-7 text-white/85">{item.description}</p>
+            )}
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              <Row label="Captain" value={item.captain} photo={item.captain_photo_url} />
+              <Row label="In-charge" value={item.incharge} photo={item.incharge_photo_url} />
+            </div>
+            {(item.team_photo_url || item.image_url) && (
+              <div className="mt-5">
+                <p className="mb-2 text-xs uppercase tracking-wide text-gold-400">Team photo</p>
+                <ZoomImage
+                  src={item.team_photo_url || item.image_url}
+                  alt={`${item.title} team`}
+                  onError={imgFallback(900, 500, "Team photo")}
+                  className="w-full rounded-2xl object-cover"
+                />
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function DetailCards({ items, kind }) {
+  const [sel, setSel] = useState(null);
+  const person = kind === "leadership";
+  return (
+    <>
+      <div
+        className={`mt-10 grid gap-6 ${person ? "grid-cols-2 lg:grid-cols-4" : "sm:grid-cols-2 lg:grid-cols-3"}`}
+      >
+        {items.map((it, i) => (
+          <Reveal key={it.id} {...stagger(i)}>
+            <button
+              onClick={() => setSel(it)}
+              className="lift group block h-full w-full overflow-hidden rounded-2xl bg-white/10 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400"
+            >
+              <img
+                src={it.image_url || placeholder(600, 400, it.title, "16346b")}
+                alt={it.title}
+                loading="lazy"
+                onError={imgFallback(600, 400, it.title)}
+                className={`w-full object-cover transition duration-300 group-hover:scale-105 ${person ? "aspect-square object-top" : "aspect-[3/2]"}`}
+              />
+              <div className="p-4">
+                <h3 className="text-lg font-semibold">{it.title}</h3>
+                {it.subtitle && (
+                  <p className="text-xs uppercase tracking-wide text-gold-400">{it.subtitle}</p>
+                )}
+                <p className="mt-2 text-xs text-white/60">Click for details</p>
+              </div>
+            </button>
+          </Reveal>
+        ))}
+      </div>
+      {!items.length && (
+        <p className="mt-10 text-center text-white/70">Details coming soon.</p>
+      )}
+      {sel && <DetailModal item={sel} kind={kind} onClose={() => setSel(null)} />}
+    </>
   );
 }
 
@@ -274,6 +407,7 @@ export default function DynamicPage() {
   );
   const [page, setPage] = useState(null);
   const [state, setState] = useState("loading");
+  const [heroZoom, setHeroZoom] = useState(false);
 
   useEffect(() => {
     setState("loading");
@@ -301,17 +435,28 @@ export default function DynamicPage() {
   }
 
   const L = page.layout;
+  // Sports / leadership / activities pages use the banner as a large group-photo hero.
+  const bigHero = ["sports", "leadership"].includes(L) && page.banner_url;
   return (
     <SiteLayout>
       <section
-        className="relative flex h-48 items-end bg-navy-900 bg-cover bg-center md:h-64"
+        className={`relative flex items-end bg-navy-900 bg-cover bg-center ${bigHero ? "h-72 md:h-[30rem]" : "h-48 md:h-64"}`}
         style={
           page.banner_url
             ? { backgroundImage: `url(${page.banner_url})` }
             : undefined
         }
       >
-        <div className="absolute inset-0 bg-gradient-to-t from-navy-950/90 to-navy-950/30" />
+        <div className={`absolute inset-0 bg-gradient-to-t ${bigHero ? "from-navy-950/85 via-transparent to-transparent" : "from-navy-950/90 to-navy-950/30"}`} />
+        {bigHero && (
+          <button
+            onClick={() => setHeroZoom(true)}
+            aria-label="View full photo"
+            className="absolute right-4 top-4 flex items-center gap-2 rounded-full bg-black/50 px-3 py-1.5 text-xs font-medium transition hover:bg-black/70"
+          >
+            <Maximize2 size={14} /> View photo
+          </button>
+        )}
         <div className="relative px-4 pb-6 md:px-10 lg:px-20">
           <Breadcrumb path={`/${slug}`} />
           <Reveal from="left" distance={160}>
@@ -382,9 +527,15 @@ export default function DynamicPage() {
           </Reveal>
         )}
         {L === "members" && <Members items={page.items} />}
+        {(L === "sports" || L === "leadership") && (
+          <DetailCards items={page.items} kind={L} />
+        )}
         {L === "downloads" && <Downloads items={page.items} />}
         {L === "contact" && <ContactSection />}
       </div>
+      {heroZoom && (
+        <Lightbox src={page.banner_url} alt={page.title} onClose={() => setHeroZoom(false)} />
+      )}
       {L === "testimonials" && <Testimonials />}
       {L === "admission" && (
         <Reveal from="left" clip>

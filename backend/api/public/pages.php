@@ -13,7 +13,7 @@ try {
     $page = $s->fetch();
     if (!$page) fail('Page not found', 404);
 
-    $i = $pdo->prepare('SELECT id, title, subtitle, description, image_url, file_url FROM page_items WHERE page_slug = ? AND is_active = 1 ORDER BY sort_order ASC, id ASC');
+    $i = $pdo->prepare('SELECT id, title, subtitle, description, captain, captain_photo_url, incharge, incharge_photo_url, team_photo_url, image_url, file_url FROM page_items WHERE page_slug = ? AND is_active = 1 ORDER BY sort_order ASC, id ASC');
     $i->execute([$slug]);
     $page['items'] = $i->fetchAll();
     respond($page);

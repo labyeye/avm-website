@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Settings, LogOut, X, Home, FileText, ChevronDown } from 'lucide-react';
+import { LayoutDashboard, Settings, LogOut, X, Home, FileText, ChevronDown, Radio } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { asset, withFallback } from '../../api/assets';
 
@@ -19,7 +19,7 @@ const PAGE_TREE = toTree(SITE_NAV);
 const GROUPS = [
   { items: [{ to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true }] },
   { title: 'Website Pages', tree: PAGE_TREE },
-  { title: 'Site', items: [{ to: '/admin/settings', label: 'Settings', icon: Settings }] },
+  { title: 'Site', items: [{ to: '/admin/live', label: 'YouTube Live', icon: Radio }, { to: '/admin/settings', label: 'Settings', icon: Settings }] },
 ];
 
 const itemCls = (isActive, depth) =>

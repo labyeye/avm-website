@@ -26,14 +26,14 @@ function ScrollColumn({ renderTiles, boxHeight, reverse, speed }) {
   useLayoutEffect(() => {
     const el = first.current;
     if (!el) return;
-    const measure = () => setH(el.offsetHeight);
+    const measure = () => setH(el.offsetHeight > 80 ? el.offsetHeight : 0); // ignore the collapsed (images not yet loaded) height
     measure();
     const ro = new ResizeObserver(measure); // images load later and change the height
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
 
-  const copies = h ? Math.max(2, Math.ceil(boxHeight / h) + 1) : 2;
+  const copies = h ? Math.min(8, Math.max(2, Math.ceil(boxHeight / h) + 1)) : 2;
   const style = h
     ? { '--shift': `-${h}px`, animation: `colShift ${Math.max(14, h / speed)}s linear infinite ${reverse ? 'reverse' : 'normal'}` }
     : undefined;
@@ -90,7 +90,7 @@ export default function Gallery({ heading, subheading, columns = '4', scroll = '
       aria-hidden={suffix ? 'true' : undefined}
       tabIndex={suffix ? -1 : 0}
     >
-      <img src={it.image_url} alt={suffix ? '' : it.caption || 'AVM photo'} loading="lazy" onError={onErr} className="block h-auto w-full transition duration-500 group-hover:scale-105" />
+      <img src={it.image_url} alt={suffix ? '' : it.caption || 'AVM photo'} loading={suffix ? 'lazy' : 'eager'} onError={onErr} className="block h-auto min-h-[8rem] w-full bg-navy-900 object-cover transition duration-500 group-hover:scale-105" />
       {it.caption && (
         <span className="absolute inset-x-0 bottom-0 translate-y-full bg-gradient-to-t from-black/80 to-transparent p-3 text-left text-xs transition group-hover:translate-y-0">{it.caption}</span>
       )}

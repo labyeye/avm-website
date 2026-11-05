@@ -4,7 +4,7 @@ import { getTestimonials } from '../../api/public';
 import { placeholder } from '../../api/assets';
 
 export function youtubeId(url = '') {
-  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/))([\w-]{11})/);
+  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/))([\w-]{11})/);
   return m ? m[1] : null;
 }
 

@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/public/Home';
 import DynamicPage from './pages/public/DynamicPage';
+import Live from './pages/public/Live';
 import ProtectedRoute from './components/admin/ProtectedRoute';
 
 // Admin bundle is split from the public site.
@@ -15,6 +16,7 @@ const Settings = lazy(() => import('./pages/admin/Settings'));
 const HomeAdmin = lazy(() => import('./pages/admin/HomeAdmin'));
 const PageAdmin = lazy(() => import('./pages/admin/PageAdmin'));
 const Messages = lazy(() => import('./pages/admin/Messages'));
+const LiveAdmin = lazy(() => import('./pages/admin/LiveAdmin'));
 
 const guard = (el) => <ProtectedRoute>{el}</ProtectedRoute>;
 
@@ -23,6 +25,8 @@ export default function App() {
     <Suspense fallback={<div className="flex min-h-screen items-center justify-center text-slate-500">Loading…</div>}>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/live" element={<Live />} />
+        <Route path="/admin/live" element={guard(<LiveAdmin />)} />
         <Route path="/admin/login" element={<Login />} />
         <Route path="/admin" element={guard(<Dashboard />)} />
         <Route path="/admin/admissions" element={guard(<Admissions />)} />

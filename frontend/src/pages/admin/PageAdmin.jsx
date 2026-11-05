@@ -14,7 +14,7 @@ import { errorMessage } from '../../api/axiosInstance';
 
 // What the items tab is called for each page.
 const ITEM_LABEL = {
-  profile: 'Person', embed: 'Tour / Video', tabs: 'Facilities (tabs)',
+  sports: 'Sports / Activities', leadership: 'Students', profile: 'Person', embed: 'Tour / Video', tabs: 'Facilities (tabs)',
   academics: 'Programmes', 'sports-and-activities': 'Activities', pastoral: 'Programmes',
   'governing-body': 'Members', alumni: 'Alumni', downloads: 'Files', 'public-disclosure': 'Documents',
 };
@@ -33,7 +33,7 @@ function buildTabs(slug, layout) {
     { id: 'header', label: 'Header', render: () => <PageForm slug={slug} fields={['title', 'subtitle', 'banner_url', 'image_url', 'file_url', 'file_label', 'is_active']} /> },
     { id: 'content', label: 'Content', render: () => <PageForm slug={slug} fields={['body']} /> },
   ];
-  if (['cards', 'members', 'downloads', 'profile', 'embed', 'tabs'].includes(layout)) {
+  if (['cards', 'members', 'downloads', 'profile', 'embed', 'tabs', 'sports', 'leadership'].includes(layout)) {
     tabs.push({ id: 'items', label: ITEM_LABEL[slug] || ITEM_LABEL[layout] || 'Items', render: () => <ItemsManager slug={slug} layout={layout} /> });
   }
   if (layout === 'contact') {
