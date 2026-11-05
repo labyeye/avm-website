@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Facebook, Instagram, Youtube } from 'lucide-react';
 import { asset, withFallback } from '../../api/assets';
-import avmlogo from "../../assets/logo.png";
+import avmlogo from "../../assets/logo-256.png";
 const COL1 = [['About Us', '/about-us'], ['Curriculum', '/academics'], ['Governing Body', '/governing-body'], ['Leadership', '/governing-body'], ['Registration Form', '/admission'], ['Sports & Activities', '/sports-and-activities'], ['Alumni', '/alumni']];
 const COL2 = [['Contact Us', '/contact-us'], ['Downloads', '/downloads'], ['Public Disclosure', '/public-disclosure'], ['House System', '/pastoral'], ['Academic Calendar', '/downloads']];
 

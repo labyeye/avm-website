@@ -5,7 +5,7 @@ import { asset, withFallback } from '../../api/assets';
 import { NAV } from '../../api/navConfig';
 import { getPage, downloadUrl } from '../../api/public';
 import useLive from '../../api/useLive';
-import avmlogo from "../../assets/logo.png";
+import avmlogo from "../../assets/logo-256.png";
 const LiveLabel = () => (
   <span className="flex items-center gap-1.5 rounded-full bg-red-600 px-3 py-1 text-xs font-bold tracking-wider text-white">
     <span className="h-2 w-2 animate-pulse rounded-full bg-white" /> LIVE

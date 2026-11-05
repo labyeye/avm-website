@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, Settings, LogOut, X, Home, FileText, ChevronDown, Radio } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { asset, withFallback } from '../../api/assets';
+import avmlogo from '../../assets/logo-256.png';
 
 import { NAV as SITE_NAV } from '../../api/navConfig';
 
@@ -67,7 +67,7 @@ export default function Sidebar({ open, onClose }) {
         }`}
       >
         <div className="flex items-center gap-3 border-b border-white/10 px-5 py-4">
-          <img src={asset('logo.png')} onError={withFallback(80, 80, 'AVM')} alt="AVM logo" className="h-10 w-10 rounded-full object-cover" />
+          <img src={avmlogo} alt="AVM logo" className="h-10 w-10 rounded-full object-cover" />
           <div className="flex-1 leading-tight">
             <div className="text-sm font-semibold">Adarsh Vidya Mandir</div>
             <div className="text-xs text-gold-400">Admin Panel</div>
