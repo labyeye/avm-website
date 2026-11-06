@@ -105,7 +105,7 @@ export default function Testimonials({ heading, subheading }) {
           <button className="absolute right-4 top-4" onClick={() => setVideo(null)} aria-label="Close"><X size={30} /></button>
           <div className="aspect-video w-full max-w-3xl" onClick={(e) => e.stopPropagation()}>
             {isVideoFile(video.video_url) ? (
-              <video className="h-full w-full rounded-lg bg-black" src={video.video_url} controls autoPlay playsInline />
+              <video className="h-full w-full rounded-lg bg-black" src={video.video_url} controls autoPlay playsInline preload="none" />
             ) : vid ? (
               <iframe className="h-full w-full rounded-lg" src={`https://www.youtube.com/embed/${vid}?autoplay=1`} title={video.title} allow="autoplay; encrypted-media; picture-in-picture" allowFullScreen />
             ) : (

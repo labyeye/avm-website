@@ -90,7 +90,7 @@ export default function Gallery({ heading, subheading, columns = '4', scroll = '
       aria-hidden={suffix ? 'true' : undefined}
       tabIndex={suffix ? -1 : 0}
     >
-      <img src={it.image_url} alt={suffix ? '' : it.caption || 'AVM photo'} loading={suffix ? 'lazy' : 'eager'} onError={onErr} className="block h-auto min-h-[8rem] w-full bg-navy-900 object-cover transition duration-500 group-hover:scale-105" />
+      <img src={it.image_url} alt={suffix ? '' : it.caption || 'AVM photo'} loading="lazy" decoding="async" onError={onErr} className="block h-auto min-h-[8rem] w-full bg-navy-900 object-cover transition duration-500 group-hover:scale-105" />
       {it.caption && (
         <span className="absolute inset-x-0 bottom-0 translate-y-full bg-gradient-to-t from-black/80 to-transparent p-3 text-left text-xs transition group-hover:translate-y-0">{it.caption}</span>
       )}
