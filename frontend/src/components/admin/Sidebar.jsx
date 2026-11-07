@@ -7,7 +7,7 @@ import avmlogo from '../../assets/logo-256.png';
 import { NAV as SITE_NAV } from '../../api/navConfig';
 
 // Every public page gets its own tabbed editor at /admin/pages/<slug> (Home has /admin/home); nested pages expand under their parent.
-const toAdmin = (to) => (to === '/' ? '/admin/home' : `/admin/pages/${to.slice(1)}`);
+const toAdmin = (to) => (to === '/' ? '/admin/home' : to === '/events' ? '/admin/events' : `/admin/pages/${to.slice(1)}`);
 const toTree = (nodes) => nodes.map((n) => ({
   label: n.label,
   to: toAdmin(n.to),

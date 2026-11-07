@@ -12,3 +12,8 @@ export const downloadUrl = (id) => `${api.defaults.baseURL}${P}/download.php?id=
 export const downloadPageUrl = (slug) => `${api.defaults.baseURL}${P}/download.php?page=${encodeURIComponent(slug)}`;
 export const getPage = (slug) => data(api.get(`${P}/pages.php`, { params: { slug } }));
 export const sendContact = (body) => data(api.post(`${P}/contact.php`, body));
+
+export const getEvents = () => data(api.get(`${P}/events.php`));
+export const getEvent = (id) => data(api.get(`${P}/events.php`, { params: { id } }));
+export const ZIP_BATCH = 10; // must match BATCH in backend/api/public/event_zip.php
+export const eventZipUrl = (id, type = 'photo', part = 1) => `${api.defaults.baseURL}${P}/event_zip.php?id=${id}&type=${type}&part=${part}`;

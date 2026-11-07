@@ -3,6 +3,8 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/public/Home';
 import DynamicPage from './pages/public/DynamicPage';
 import Live from './pages/public/Live';
+import Events from './pages/public/Events';
+import EventDetail from './pages/public/EventDetail';
 import ProtectedRoute from './components/admin/ProtectedRoute';
 
 // Admin bundle is split from the public site.
@@ -16,6 +18,7 @@ const Settings = lazy(() => import('./pages/admin/Settings'));
 const HomeAdmin = lazy(() => import('./pages/admin/HomeAdmin'));
 const PageAdmin = lazy(() => import('./pages/admin/PageAdmin'));
 const Messages = lazy(() => import('./pages/admin/Messages'));
+const EventsAdmin = lazy(() => import('./pages/admin/EventsAdmin'));
 const LiveAdmin = lazy(() => import('./pages/admin/LiveAdmin'));
 
 const guard = (el) => <ProtectedRoute>{el}</ProtectedRoute>;
@@ -26,6 +29,9 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/live" element={<Live />} />
+        <Route path="/events" element={<Events />} />
+        <Route path="/events/:id" element={<EventDetail />} />
+        <Route path="/admin/events" element={guard(<EventsAdmin />)} />
         <Route path="/admin/live" element={guard(<LiveAdmin />)} />
         <Route path="/admin/login" element={<Login />} />
         <Route path="/admin" element={guard(<Dashboard />)} />

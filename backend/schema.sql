@@ -433,3 +433,28 @@ INSERT INTO page_items (page_slug, title, subtitle, description, image_url, file
 INSERT INTO page_items (page_slug, title, subtitle, description, image_url, file_url, sort_order) SELECT 'sports-and-activities/activities','Annual Day','Stage','Dance, drama and music in front of the whole school community.','/assets/photos/act-annualday.jpg','',COALESCE((SELECT MAX(sort_order) FROM page_items WHERE page_slug='sports-and-activities/activities'),0)+1 FROM DUAL WHERE EXISTS (SELECT 1 FROM pages WHERE slug='sports-and-activities/activities') AND NOT EXISTS (SELECT 1 FROM page_items WHERE page_slug='sports-and-activities/activities' AND title='Annual Day');
 INSERT INTO page_items (page_slug, title, subtitle, description, image_url, file_url, sort_order) SELECT 'sports-and-activities/activities','Festival Celebrations','Culture','Costume days, dandiya, rangoli and festivals celebrated together.','/assets/photos/act-festival.jpg','',COALESCE((SELECT MAX(sort_order) FROM page_items WHERE page_slug='sports-and-activities/activities'),0)+1 FROM DUAL WHERE EXISTS (SELECT 1 FROM pages WHERE slug='sports-and-activities/activities') AND NOT EXISTS (SELECT 1 FROM page_items WHERE page_slug='sports-and-activities/activities' AND title='Festival Celebrations');
 INSERT INTO page_items (page_slug, title, subtitle, description, image_url, file_url, sort_order) SELECT 'sports-and-activities/activities','Republic Day','National pride','Tricolour performances and a flag hoisting that students look forward to.','/assets/photos/act-republic.jpg','',COALESCE((SELECT MAX(sort_order) FROM page_items WHERE page_slug='sports-and-activities/activities'),0)+1 FROM DUAL WHERE EXISTS (SELECT 1 FROM pages WHERE slug='sports-and-activities/activities') AND NOT EXISTS (SELECT 1 FROM page_items WHERE page_slug='sports-and-activities/activities' AND title='Republic Day');
+
+-- ---------- Events (also in backend/migrations/007_events.sql) ----------
+CREATE TABLE IF NOT EXISTS events (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  event_date DATE NOT NULL,
+  location VARCHAR(255) DEFAULT '',
+  description TEXT,
+  poster_url VARCHAR(500) DEFAULT '',
+  sort_order INT NOT NULL DEFAULT 0,
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  INDEX idx_date (event_date)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS event_media (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  event_id INT UNSIGNED NOT NULL,
+  type VARCHAR(10) NOT NULL DEFAULT 'photo',   -- photo | video
+  url VARCHAR(500) NOT NULL,
+  caption VARCHAR(255) DEFAULT '',
+  sort_order INT NOT NULL DEFAULT 0,
+  in_album TINYINT(1) NOT NULL DEFAULT 1,       -- photos only: shown in the flip album
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  INDEX idx_event (event_id)
+) ENGINE=InnoDB;

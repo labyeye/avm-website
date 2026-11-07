@@ -59,3 +59,11 @@ export const uploadFile = (file) => {
   body.append('file', file);
   return data(api.post(`${A}/upload_file.php`, body, { headers: { 'Content-Type': 'multipart/form-data' } }));
 };
+
+export const eventsApi = crud('events');
+export const eventMediaApi = {
+  list: (event_id) => data(api.get(`${A}/event_media.php`, { params: { event_id } })),
+  create: (body) => data(api.post(`${A}/event_media.php`, body)),
+  update: (id, body) => data(api.put(`${A}/event_media.php`, body, { params: { id } })),
+  remove: (id) => data(api.delete(`${A}/event_media.php`, { params: { id } })),
+};

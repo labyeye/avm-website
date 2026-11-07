@@ -104,7 +104,7 @@ export default function Gallery({ embedded = false }) {
         <label className="mt-3 inline-flex cursor-pointer items-center gap-2 text-sm text-slate-600">
           <input type="checkbox" checked={cropEach} onChange={(e) => setCropEach(e.target.checked)} /> Crop each image before uploading
         </label>
-        <p className="mt-2 text-xs text-slate-500">JPG, PNG, WEBP or GIF, up to 10 MB each. Add captions afterwards with Edit.</p>
+        <p className="mt-2 text-xs text-slate-500">JPG, PNG, WEBP or GIF, up to 50 MB each. Add captions afterwards with Edit.</p>
       </div>
 
       {items.length > 0 && (

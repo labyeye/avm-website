@@ -7,7 +7,7 @@ $file = $_FILES['image'] ?? null;
 if (!$file || $file['error'] !== UPLOAD_ERR_OK) {
     fail($file && $file['error'] === UPLOAD_ERR_INI_SIZE ? 'File is too large' : 'No image uploaded');
 }
-if ($file['size'] > 10 * 1024 * 1024) fail('Image must be 10 MB or smaller');
+if ($file['size'] > 50 * 1024 * 1024) fail('Image must be 50 MB or smaller');
 
 $types = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp', 'image/gif' => 'gif'];
 $mime = (new finfo(FILEINFO_MIME_TYPE))->file($file['tmp_name']);

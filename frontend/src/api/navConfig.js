@@ -43,6 +43,7 @@ export const NAV = [
       ['Activities', 'activities'],
     ]),
   },
+  { label: 'Events', to: '/events' },
   {
     label: 'Downloads', to: '/downloads',
     children: sub('downloads', [
