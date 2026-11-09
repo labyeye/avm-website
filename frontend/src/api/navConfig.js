@@ -13,10 +13,10 @@ export const NAV = [
     label: 'About Us', to: '/about-us',
     children: sub('about-us', [
       ['About AVM', 'about-avm'],
-      ['Vision & Mission', 'vision-mission'],
+      ['Why AVM', 'why-avm'],
       ["Principal's Welcome", 'principals-welcome'],
       ['Virtual Tour', 'virtual-tour'],
-      ['Testimonials', 'testimonials'],
+      ['Working Committee', 'working-committee'],
     ]),
   },
   {
@@ -28,44 +28,28 @@ export const NAV = [
     ]),
   },
   {
-    label: 'Governing Body', to: '/governing-body',
-    children: sub('governing-body', [
-      ["Founder's Message", 'founders-message'],
-      ['Board of Governors', 'board-of-governors'],
-      ['About President', 'about-president'],
-    ]),
-  },
-  {
-    label: 'Sports & Activities', to: '/sports-and-activities',
+    label: 'Sports & Events', to: '/sports-and-activities',
     children: sub('sports-and-activities', [
       ['Sports Overview', 'sports-overview'],
       ['Student Leadership', 'student-leadership'],
-      ['Activities', 'activities'],
-    ]),
+      ['Achievements', 'achievements'],
+    ]).concat([{ label: 'Events', to: '/events' }]),
   },
-  { label: 'Events', to: '/events' },
   {
     label: 'Downloads', to: '/downloads',
     children: sub('downloads', [
       ['Annual Calendar 2026-2027', 'annual-calendar'],
       ['E-Brochure', 'e-brochure'],
-      ['Yearbook 2025-2026', 'yearbook-2025-2026'],
-      ['Old Year Books', 'old-year-books'],
       ['Newsletter', 'newsletter'],
-      ['Results', 'results'],
-      ['Transfer Certificate', 'transfer-certificate'],
     ]),
   },
   {
-    label: 'Pastoral', to: '/pastoral',
-    children: sub('pastoral', [
-      ['Overview', 'overview'],
-      ['House System', 'house-system', [
-        ['Knowledge House', 'knowledge-house'],
-        ['Wonder House', 'wonder-house'],
-        ['Intelligent House', 'intelligent-house'],
-        ['Confidence House', 'confidence-house'],
-      ]],
+    label: 'House System', to: '/pastoral',
+    children: sub('pastoral/house-system', [
+      ['Knowledge House', 'knowledge-house'],
+      ['Wonder House', 'wonder-house'],
+      ['Intelligence House', 'intelligent-house'],
+      ['Confidence House', 'confidence-house'],
     ]),
   },
   // Dropdown is built from the documents on this page (Admin → Public Disclosure → Documents); clicking one downloads the file.
@@ -77,14 +61,7 @@ export const NAV = [
       ['Procedure', 'procedure'],
       ['Online Registration', 'online-registration'],
       ['Fee Structure', 'fee-structure'],
-      ['Scholarships and Bursaries', 'scholarships-and-bursaries'],
     ]),
   },
-  {
-    label: 'Contact Us', to: '/contact-us',
-    children: sub('contact-us', [
-      ['Enquire Now', 'enquire-now'],
-      ['Apply Now', 'apply-now'],
-    ]),
-  },
+  { label: 'Contact Us', to: '/contact-us' },
 ];

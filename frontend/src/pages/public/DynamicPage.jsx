@@ -6,6 +6,7 @@ import RichText from "../../components/public/RichText";
 import ContactSection from "../../components/public/ContactSection";
 import AdmissionForm from "../../components/public/AdmissionForm";
 import Reveal from "../../components/public/Reveal";
+import WhyAVM from "../../components/public/WhyAVM";
 import FacilityTabs from "../../components/public/FacilityTabs";
 import Testimonials, { youtubeId } from "../../components/public/Testimonials";
 import ZoomImage, { Lightbox } from "../../components/public/ZoomImage";
@@ -179,15 +180,15 @@ function Profile({ person, image, body }) {
   // Photo: the page's own image (Header tab) wins; the Person item's photo is the fallback.
   const photo = image || person?.image_url;
   return (
-    <div className={`grid gap-10 ${photo || person ? "md:grid-cols-[280px_1fr]" : ""}`}>
+    <div className={`grid gap-10 ${photo || person ? "md:grid-cols-[290px_1fr]" : ""}`}>
       {(photo || person) && (
         <Reveal from="left">
-          <div className="lift rounded-2xl bg-white/10 p-5 text-center">
+          <div className="lift rounded-2xl p-5 text-center">
             <ZoomImage
               src={photo || placeholder(400, 400, "Photo", "16346b")}
               alt={person?.title || "Photo"}
               onError={imgFallback(400, 400, "Photo")}
-              className="mx-auto aspect-square w-full max-w-[240px] rounded-2xl object-cover object-top"
+              className="mx-auto aspect-square w-full rounded-full object-cover object-top"
             />
             {person?.title && <h3 className="mt-4 text-lg font-semibold">{person.title}</h3>}
             {person?.subtitle && (
@@ -197,12 +198,85 @@ function Profile({ person, image, body }) {
         </Reveal>
       )}
       <Reveal from="right">
-        <RichText text={body} className="text-[15px]" />
+        <RichText text={body} className="text-[14px] text-justify" />
       </Reveal>
     </div>
   );
 }
 
+
+const parseGallery = (v) => {
+  try {
+    const a = JSON.parse(v || "[]");
+    return Array.isArray(a) ? a : [];
+  } catch {
+    return [];
+  }
+};
+
+// Masonry photo grid (CSS columns); click a photo to open it full-size.
+function MasonryGallery({ urls, title }) {
+  const [open, setOpen] = useState(null);
+  if (!urls.length) return null;
+  return (
+    <div className="mt-6">
+      <p className="mb-2 text-xs uppercase tracking-wide text-gold-400">Gallery</p>
+      <div className="columns-2 gap-3 md:columns-3">
+        {urls.map((u, i) => (
+          <button key={u + i} onClick={() => setOpen(u)} className="mb-3 block w-full overflow-hidden rounded-xl">
+            <img src={u} alt={`${title} photo ${i + 1}`} loading="lazy" className="w-full object-cover transition duration-300 hover:scale-105" />
+          </button>
+        ))}
+      </div>
+      {open && <Lightbox src={open} alt={title} onClose={() => setOpen(null)} />}
+    </div>
+  );
+}
+
+// Sports in-charge: photo + message shown above the sport cards.
+function InCharge({ page }) {
+  if (!page.incharge_message && !page.incharge_name) return null;
+  return (
+    <Reveal from="up">
+      <div className="mt-2 grid items-center gap-8 rounded-2xl bg-white/10 p-6 md:grid-cols-[220px_1fr]">
+        <div className="text-center">
+          <ZoomImage
+            src={page.incharge_photo_url || placeholder(400, 400, "Photo", "16346b")}
+            alt={page.incharge_name || "In-charge"}
+            onError={imgFallback(400, 400, "Photo")}
+            className="mx-auto aspect-square w-48 rounded-full border-2 border-gold-500 object-cover object-top"
+          />
+          {page.incharge_name && <h3 className="mt-3 text-lg font-semibold">{page.incharge_name}</h3>}
+          {page.incharge_role && <p className="text-xs uppercase tracking-wide text-gold-400">{page.incharge_role}</p>}
+        </div>
+        <RichText text={page.incharge_message} className="text-[15px]" />
+      </div>
+    </Reveal>
+  );
+}
+
+// Achievements: photo cards with year/level badge.
+function Achievements({ items }) {
+  if (!items.length) return <p className="mt-10 text-center text-white/70">Achievements coming soon.</p>;
+  return (
+    <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {items.map((it, i) => (
+        <Reveal key={it.id} {...stagger(i)}>
+          <article className="lift h-full overflow-hidden rounded-2xl bg-white/10">
+            {it.image_url && (
+              <ZoomImage src={it.image_url} alt={it.title} loading="lazy" onError={imgFallback(600, 400, it.title)} className="aspect-[3/2] w-full object-cover" />
+            )}
+            <div className="p-5">
+              {it.subtitle && <span className="inline-block rounded-full bg-gold-500 px-3 py-0.5 text-xs font-semibold text-navy-950">{it.subtitle}</span>}
+              <h3 className="mt-2 text-lg font-semibold">{it.title}</h3>
+              {it.description && <p className="mt-1 whitespace-pre-line text-sm text-white/80">{it.description}</p>}
+            </div>
+          </article>
+        </Reveal>
+      ))}
+    </div>
+  );
+}
 
 // Sports / activities / student leadership: clickable cards that open a details modal.
 function DetailModal({ item, kind, onClose }) {
@@ -273,21 +347,41 @@ function DetailModal({ item, kind, onClose }) {
             {item.description && (
               <p className="mt-4 whitespace-pre-line leading-7 text-white/85">{item.description}</p>
             )}
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              <Row label="Captain" value={item.captain} photo={item.captain_photo_url} />
+            <div className="mt-5 grid gap-6 md:grid-cols-[200px_1fr]">
+              {(item.captain || item.captain_photo_url) && (
+                <div className="text-center">
+                  <ZoomImage
+                    src={item.captain_photo_url || placeholder(300, 300, "Captain", "16346b")}
+                    alt={item.captain || "Captain"}
+                    onError={imgFallback(300, 300, "Captain")}
+                    className="mx-auto aspect-square w-40 rounded-full border-2 border-gold-500 object-cover object-top md:w-full"
+                  />
+                  <p className="mt-2 text-xs uppercase tracking-wide text-gold-400">Captain</p>
+                  <p className="font-semibold">{item.captain}</p>
+                </div>
+              )}
+              {(item.team_photo_url || item.image_url) && (
+                <div>
+                  <p className="mb-2 text-xs uppercase tracking-wide text-gold-400">Team photo</p>
+                  <ZoomImage
+                    src={item.team_photo_url || item.image_url}
+                    alt={`${item.title} team`}
+                    onError={imgFallback(900, 500, "Team photo")}
+                    className="w-full rounded-2xl object-cover"
+                  />
+                </div>
+              )}
+            </div>
+            {item.captain_message && (
+              <blockquote className="mt-5 rounded-xl border-l-4 border-gold-500 bg-white/10 p-4">
+                <p className="text-xs uppercase tracking-wide text-gold-400">Captain's message</p>
+                <p className="mt-1 whitespace-pre-line italic leading-7 text-white/90">{item.captain_message}</p>
+              </blockquote>
+            )}
+            <div className="mt-3">
               <Row label="In-charge" value={item.incharge} photo={item.incharge_photo_url} />
             </div>
-            {(item.team_photo_url || item.image_url) && (
-              <div className="mt-5">
-                <p className="mb-2 text-xs uppercase tracking-wide text-gold-400">Team photo</p>
-                <ZoomImage
-                  src={item.team_photo_url || item.image_url}
-                  alt={`${item.title} team`}
-                  onError={imgFallback(900, 500, "Team photo")}
-                  className="w-full rounded-2xl object-cover"
-                />
-              </div>
-            )}
+            <MasonryGallery urls={parseGallery(item.gallery)} title={item.title} />
           </>
         )}
       </div>
@@ -470,7 +564,8 @@ export default function DynamicPage() {
         </div>
       </section>
 
-      <div className="section mx-auto max-w-6xl bg-navy-700">
+      {L === "why-avm" && <WhyAVM />}
+      <div className={`section mx-auto max-w-9xl  bg-navy-700 ${L === "why-avm" ? "hidden" : ""}`}>
         {L === "profile" ? (
           <Profile person={page.items[0]} image={page.image_url} body={page.body} />
         ) : (
@@ -494,7 +589,7 @@ export default function DynamicPage() {
               </Reveal>
             )}
             <Reveal from="right">
-              <RichText text={page.body} className="max-w-4xl" />
+              <RichText text={page.body} className="max-w-1xl" />
             </Reveal>
           </div>
         )}
@@ -527,6 +622,8 @@ export default function DynamicPage() {
           </Reveal>
         )}
         {L === "members" && <Members items={page.items} />}
+        {L === "sports" && <InCharge page={page} />}
+        {L === "achievements" && <Achievements items={page.items} />}
         {(L === "sports" || L === "leadership") && (
           <DetailCards items={page.items} kind={L} />
         )}

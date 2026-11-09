@@ -7,7 +7,7 @@ export default {
         navy: { 950: '#0a1628', 900: '#0f2347', 800: '#16346b', 700: '#1a3a7a', 600: '#2a4d94' },
         gold: { 400: '#dcba6a', 500: '#c9a54a', 600: '#a98836' },
       },
-      fontFamily: { sans: ['Poppins', 'system-ui', 'sans-serif'] },
+      fontFamily: { sans: ['Arial MT Pro', 'Arial', 'Helvetica', 'sans-serif'], display: ['The Seasons', 'Cormorant Garamond', 'Georgia', 'serif'] },
       keyframes: {
         marquee: { '0%': { transform: 'translateX(0)' }, '100%': { transform: 'translateX(-50%)' } },
         colUp: { '0%': { transform: 'translateY(0)' }, '100%': { transform: 'translateY(-50%)' } },

@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react';
 import { Pencil, Trash2, Eye, EyeOff, Plus } from 'lucide-react';
 import { PageShell } from '../../components/admin/AdminLayout';
 import DataTable from '../../components/admin/DataTable';
+import ImageUpload from '../../components/admin/ImageUpload';
 import Modal from '../../components/admin/Modal';
 import { useToast } from '../../components/admin/Toast';
 import { noticesApi } from '../../api/admin';
 import { errorMessage } from '../../api/axiosInstance';
 
 const today = () => new Date().toISOString().slice(0, 10);
-const empty = () => ({ title: '', content: '', published_at: today(), is_active: true });
+const empty = () => ({ title: '', content: '', link_url: '', image_url: '', published_at: today(), is_active: true });
 
 function NForm({ value, onChange }) {
   const set = (k, v) => onChange({ ...value, [k]: v });
@@ -16,6 +17,8 @@ function NForm({ value, onChange }) {
     <div className="space-y-3">
       <div><label className="label">Title</label><input className="field" required value={value.title} onChange={(e) => set('title', e.target.value)} /></div>
       <div><label className="label">Content</label><textarea rows={4} className="field" value={value.content ?? ''} onChange={(e) => set('content', e.target.value)} /></div>
+      <div><label className="label">Link (YouTube video plays on the notice board; other links open in a new tab)</label><input className="field" placeholder="https://youtube.com/watch?v=…" value={value.link_url ?? ''} onChange={(e) => set('link_url', e.target.value)} /></div>
+      <div><label className="label">Image (optional — shown on the main screen when there is no video)</label><ImageUpload aspect={16 / 9} value={value.image_url ?? ''} onChange={(u) => set('image_url', u)} /></div>
       <div><label className="label">Published Date</label><input type="date" required className="field" value={value.published_at} onChange={(e) => set('published_at', e.target.value)} /></div>
       <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={!!value.is_active} onChange={(e) => set('is_active', e.target.checked)} /> Active</label>
     </div>

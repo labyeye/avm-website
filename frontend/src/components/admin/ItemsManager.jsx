@@ -4,6 +4,7 @@ import DataTable from './DataTable';
 import Modal from './Modal';
 import ImageUpload from './ImageUpload';
 import FileUpload from './FileUpload';
+import MultiImageField from './MultiImageField';
 import { ICONS, iconByName } from '../../api/icons';
 import { useToast } from './Toast';
 import { pageItemsApi } from '../../api/admin';
@@ -15,6 +16,8 @@ const ALL = {
   description: { label: 'Description', textarea: true },
   captain: { label: 'Captain name' },
   captain_photo_url: { label: 'Captain photo', upload: true },
+  captain_message: { label: 'Captain message', textarea: true },
+  gallery: { label: 'Gallery photos (shown as a masonry grid — select many at once)', gallery: true },
   incharge: { label: 'In-charge name (teacher / coach)' },
   incharge_photo_url: { label: 'In-charge photo', upload: true },
   image_url: { label: 'Image', upload: true },
@@ -32,13 +35,14 @@ const ICON_LABELS = {
 };
 
 // Recommended crop shape for each layout's image.
-const ASPECT = { slides: 16 / 9, sports: 3 / 2, leadership: 1, cards: 3 / 2, tabs: 3 / 2, members: 1, profile: 1, items: 1 };
+const ASPECT = { slides: 16 / 9, achievements: 3 / 2, sports: 3 / 2, leadership: 1, cards: 3 / 2, tabs: 3 / 2, members: 1, profile: 1, items: 1 };
 
 // Per-layout label overrides.
 const LAYOUT_LABELS = {
   tabs: { title: { label: 'Tab name (e.g. Library)' }, image_url: { label: 'Photo', upload: true } },
   profile: { title: { label: 'Name' }, subtitle: { label: 'Designation' }, image_url: { label: 'Photo', upload: true } },
   sports: { title: { label: 'Name (e.g. Cricket)' }, subtitle: { label: 'Short tagline' }, description: { label: 'About this sport / activity', textarea: true }, image_url: { label: 'Card photo', upload: true } },
+  achievements: { title: { label: 'Achievement (e.g. State Level Gold — Kabaddi)' }, subtitle: { label: 'Year / Level (e.g. 2026 · State)' }, description: { label: 'Details', textarea: true }, image_url: { label: 'Photo', upload: true } },
   leadership: { title: { label: 'Student name' }, subtitle: { label: 'Position (e.g. Head Boy)' }, description: { label: 'Student details (class, house, about)', textarea: true }, image_url: { label: 'Student photo', upload: true } },
   embed: { title: { label: 'Title' }, file_url: { label: 'Tour / video link (YouTube or 360° tour URL)', file: true } },
 };
@@ -50,8 +54,9 @@ export const FIELDS_BY_LAYOUT = {
   tabs: ['title', 'description', 'image_url', 'sort_order'],
   embed: ['title', 'file_url'],
   slides: ['title', 'subtitle', 'image_url', 'sort_order'],
-  sports: ['title', 'subtitle', 'description', 'image_url', 'captain', 'captain_photo_url', 'incharge', 'incharge_photo_url', 'team_photo_url', 'sort_order'],
+  sports: ['title', 'subtitle', 'description', 'image_url', 'captain', 'captain_photo_url', 'captain_message', 'incharge', 'incharge_photo_url', 'team_photo_url', 'gallery', 'sort_order'],
   leadership: ['title', 'subtitle', 'description', 'image_url', 'sort_order'],
+  achievements: ['title', 'subtitle', 'description', 'image_url', 'sort_order'],
   cards: ['title', 'subtitle', 'description', 'image_url', 'sort_order'],
   members: ['title', 'subtitle', 'description', 'image_url', 'sort_order'],
   downloads: ['title', 'subtitle', 'file_url', 'sort_order'],
@@ -60,7 +65,7 @@ export const FIELDS_BY_LAYOUT = {
 export default function ItemsManager({ slug, layout = 'cards' }) {
   const toast = useToast();
   const fields = FIELDS_BY_LAYOUT[layout] || FIELDS_BY_LAYOUT.cards;
-  const blank = () => ({ page_slug: slug, title: '', subtitle: '', description: '', captain: '', incharge: '', captain_photo_url: '', incharge_photo_url: '', team_photo_url: '', image_url: '', file_url: '', sort_order: 0, is_active: true });
+  const blank = () => ({ page_slug: slug, title: '', subtitle: '', description: '', captain: '', captain_message: '', gallery: '', incharge: '', captain_photo_url: '', incharge_photo_url: '', team_photo_url: '', image_url: '', file_url: '', sort_order: 0, is_active: true });
   const [rows, setRows] = useState([]);
   const [form, setForm] = useState(null);
   const [deleting, setDeleting] = useState(null);
@@ -130,6 +135,8 @@ export default function ItemsManager({ slug, layout = 'cards' }) {
                         ))}
                       </div>
                     )
+                    : f.gallery
+                    ? <MultiImageField value={form[k]} onChange={(v) => set(k, v)} />
                     : f.file
                     ? <FileUpload value={form[k]} onChange={(u) => set(k, u)} />
                     : f.upload

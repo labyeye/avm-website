@@ -7,6 +7,11 @@ html { scroll-behavior: smooth; }
 /* Masonry columns drift by exactly one copy of their content (--shift is measured in JS). */
 @keyframes colShift { to { transform: translateY(var(--shift)); } }
 
+/* Headings: "The Seasons" (drop TheSeasons.woff2 / .otf into public/fonts/); Cormorant Garamond is the interim fallback.
+   Body, subtitles, descriptions: Arial MT Pro (uses the installed font, else Arial). */
+@font-face { font-family: 'The Seasons'; src: url('/fonts/TheSeasons.woff2') format('woff2'), url('/fonts/TheSeasons.otf') format('opentype'); font-weight: 100 900; font-display: swap; }
+h1, h2, h3, h4, h5, h6 { font-family: 'The Seasons', 'Cormorant Garamond', Georgia, serif; font-weight: 400; letter-spacing: 0.01em; }
+
 html, body { overflow-x: clip; }
 body { @apply font-sans text-white bg-navy-700 antialiased; }
 

@@ -64,6 +64,14 @@ export default function PageForm({ slug, fields = ['title', 'subtitle', 'banner_
           <p className="mt-1 text-xs text-slate-500">Separate paragraphs with a blank line. Start a line with <code>## </code> for a heading.</p>
         </div>
       )}
+      {fields.includes('incharge_message') && (
+        <div className="space-y-3 rounded-lg border border-slate-200 p-3">
+          <div><label className="label">In-charge name</label><input className="field" value={form.incharge_name ?? ''} onChange={(e) => set('incharge_name', e.target.value)} /></div>
+          <div><label className="label">Designation (e.g. Sports In-charge)</label><input className="field" value={form.incharge_role ?? ''} onChange={(e) => set('incharge_role', e.target.value)} /></div>
+          <div><label className="label">Photo</label><ImageUpload aspect={1} value={form.incharge_photo_url ?? ''} onChange={(u) => set('incharge_photo_url', u)} /></div>
+          <div><label className="label">Message</label><textarea rows={6} className="field" value={form.incharge_message ?? ''} onChange={(e) => set('incharge_message', e.target.value)} /></div>
+        </div>
+      )}
       {fields.includes('is_active') && <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={form.is_active} onChange={(e) => set('is_active', e.target.checked)} /> Published</label>}
       <button className="btn-gold" disabled={busy}><Save size={16} /> {busy ? 'Saving…' : 'Save'}</button>
     </form>
