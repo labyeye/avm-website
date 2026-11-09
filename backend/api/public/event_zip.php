@@ -31,8 +31,13 @@ if ($zip->open($tmp, ZipArchive::OVERWRITE) !== true) fail('Could not create ZIP
 $n = 0;
 foreach ($urls as $u) {
     if (strpos($u, '/backend/uploads/') !== 0) continue;       // only files stored on this server
-    $path = realpath("$dir/" . basename($u));
-    if ($path && strpos($path, $dir) === 0 && is_file($path)) { $zip->addFile($path, (($part - 1) * BATCH + ++$n) . '-' . basename($u)); }
+    $base = basename($u);
+    // WebP display copies: swap in the original (jpg/png with the same id) so downloads are full quality
+    if (preg_match('/^([a-f0-9]{16})\.webp$/', $base, $mm)) {
+        foreach (['jpg', 'png'] as $oe) { if (is_file("$dir/{$mm[1]}.$oe")) { $base = "{$mm[1]}.$oe"; break; } }
+    }
+    $path = realpath("$dir/$base");
+    if ($path && strpos($path, $dir) === 0 && is_file($path)) { $zip->addFile($path, (($part - 1) * BATCH + ++$n) . '-' . $base); }
 }
 $zip->close();
 if (!$n) { @unlink($tmp); fail('No downloadable files for this event', 404); }

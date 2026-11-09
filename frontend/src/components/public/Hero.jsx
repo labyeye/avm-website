@@ -13,7 +13,7 @@ export default function Hero({ heading, image }) {
 
   const list = slides.length
     ? slides
-    : [{ id: 0, title: heading || 'Adarsh Vidya Mandir', subtitle: '', image_url: image || asset('hero-bg.jpg') }];
+    : [{ id: 0, title: heading || 'Adarsh Vidya Mandir', subtitle: '', image_url: image || asset('photos/hero-campus.jpg') }];
   const cur = idx % list.length;
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export default function Hero({ heading, image }) {
           key={s.id}
           aria-hidden={i !== cur}
           className={`absolute inset-0 flex items-end justify-center bg-cover bg-center pb-12 transition-opacity duration-1000 ${i === cur ? 'opacity-100' : 'opacity-0'}`}
-          style={{ backgroundImage: `url(${s.image_url || asset('hero-bg.jpg')}), url(https://placehold.co/1920x900/16346b/white?text=Adarsh+Vidya+Mandir)` }}
+          style={{ backgroundImage: `url(${s.image_url || asset('photos/hero-campus.jpg')}), url(https://placehold.co/1920x900/16346b/white?text=Adarsh+Vidya+Mandir)` }}
         >
           <div className="absolute inset-0 bg-gradient-to-t from-navy-950/90  to-transparent" />
           <div className="relative px-4 text-center">

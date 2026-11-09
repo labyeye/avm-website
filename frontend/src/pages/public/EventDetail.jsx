@@ -7,7 +7,7 @@ import PhotoViewer from "../../components/public/PhotoViewer";
 import FlipAlbum from "../../components/public/FlipAlbum";
 import ZoomImage from "../../components/public/ZoomImage";
 import { youtubeId } from "../../components/public/Testimonials";
-import { getEvent, eventZipUrl, ZIP_BATCH } from "../../api/public";
+import { getEvent, eventZipUrl, originalPhotoUrl, ZIP_BATCH } from "../../api/public";
 import { placeholder } from "../../api/assets";
 import { fmtDate } from "./Events";
 
@@ -47,7 +47,7 @@ function Photos({ photos, eventId }) {
                 <img src={p.url} alt={p.caption || ""} loading="lazy" className="block h-auto min-h-[6rem] w-full cursor-zoom-in transition duration-500 group-hover:scale-105" />
               </button>
               <a
-                href={p.url}
+                href={originalPhotoUrl(p.url)}
                 download={fileName(p.url)}
                 aria-label="Download photo"
                 className="absolute right-2 top-2 rounded-full bg-black/60 p-2 text-white opacity-100 transition hover:bg-gold-500 hover:text-navy-950 md:opacity-0 md:group-hover:opacity-100"

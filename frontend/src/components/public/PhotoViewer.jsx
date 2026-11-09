@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { ChevronLeft, ChevronRight, Download, X } from "lucide-react";
+import { originalPhotoUrl } from "../../api/public";
 
 const fileName = (url = "") => url.split("?")[0].split("/").pop() || "photo.jpg";
 
@@ -48,7 +49,7 @@ export default function PhotoViewer({ photos, index, onIndex, onClose }) {
       <div className="flex items-center justify-between p-4 text-white" onClick={(e) => e.stopPropagation()}>
         <span className="text-sm text-white/70">{index + 1} / {photos.length}</span>
         <div className="flex gap-2">
-          <a href={p.url} download={fileName(p.url)} className={btn} aria-label="Download photo"><Download size={20} /></a>
+          <a href={originalPhotoUrl(p.url)} download={fileName(p.url)} className={btn} aria-label="Download photo"><Download size={20} /></a>
           <button onClick={onClose} className={btn} aria-label="Close"><X size={20} /></button>
         </div>
       </div>

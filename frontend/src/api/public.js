@@ -17,3 +17,9 @@ export const getEvents = () => data(api.get(`${P}/events.php`));
 export const getEvent = (id) => data(api.get(`${P}/events.php`, { params: { id } }));
 export const ZIP_BATCH = 10; // must match BATCH in backend/api/public/event_zip.php
 export const eventZipUrl = (id, type = 'photo', part = 1) => `${api.defaults.baseURL}${P}/event_zip.php?id=${id}&type=${type}&part=${part}`;
+
+// Photos are shown as light WebP copies; downloads should give the untouched original.
+export const originalPhotoUrl = (url = '') => {
+  const m = /\/backend\/uploads\/([a-f0-9]{16}\.webp)$/.exec(String(url).split('?')[0]);
+  return m ? `${P}/original.php?f=${m[1]}` : url;
+};
