@@ -8,7 +8,7 @@ if ($slug === '') fail('slug is required', 422);
 
 try {
     $pdo = db();
-    $s = $pdo->prepare('SELECT slug, title, subtitle, banner_url, image_url, file_url, file_label, body, layout, incharge_name, incharge_role, incharge_photo_url, incharge_message FROM pages WHERE slug = ? AND is_active = 1');
+    $s = $pdo->prepare('SELECT slug, title, subtitle, banner_url, image_url, file_url, file_label, body, layout, incharge_name, incharge_role, incharge_photo_url, incharge_message, headgirl_name, headgirl_photo_url, headgirl_message, vice_name, vice_photo_url, vice_message, team_photo_url FROM pages WHERE slug = ? AND is_active = 1');
     $s->execute([$slug]);
     $page = $s->fetch();
     if (!$page) fail('Page not found', 404);

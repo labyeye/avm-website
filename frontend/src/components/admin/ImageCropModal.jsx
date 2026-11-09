@@ -90,7 +90,7 @@ export default function ImageCropModal({ file, aspect, title = 'Crop image', onD
               const on = choice === p.value || same(choice, p.value);
               return (
                 <button key={p.label} type="button" onClick={() => { setChoice(p.value); setCrop({ x: 0, y: 0 }); }}
-                  className={`rounded-full px-3 py-1 text-xs font-medium ${on ? 'bg-gold-500 text-navy-950' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>
+                  className={`rounded-full px-3 py-1 text-xs font-medium ${on ? 'bg-navy-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>
                   {p.label}
                 </button>
               );

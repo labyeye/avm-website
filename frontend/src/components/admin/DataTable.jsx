@@ -24,13 +24,13 @@ export default function DataTable({ columns, rows, searchKeys, pageSize = 10, ac
   const slice = filtered.slice(start, start + pageSize);
 
   return (
-    <div className="rounded-xl bg-white shadow-sm">
+    <div className="overflow-hidden rounded-2xl bg-white">
       {(searchKeys || toolbar) && (
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 p-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-navy-950/10 p-4">
           {searchKeys ? (
             <div className="relative w-full sm:w-72">
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input className="field pl-9" placeholder="Search…" value={query} onChange={(e) => setQuery(e.target.value)} />
+              <input className="field pl-9" placeholder="Search" value={query} onChange={(e) => setQuery(e.target.value)} />
             </div>
           ) : <span />}
           {toolbar}
@@ -38,10 +38,10 @@ export default function DataTable({ columns, rows, searchKeys, pageSize = 10, ac
       )}
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm text-slate-700">
-          <thead className="bg-slate-50 text-xs uppercase text-slate-500">
+          <thead className="border-b border-navy-950/10 bg-[#f9fafb] text-xs text-slate-500">
             <tr>
-              {columns.map((c) => <th key={c.key} className="whitespace-nowrap px-4 py-3 font-semibold">{c.label}</th>)}
-              {actions && <th className="px-4 py-3 font-semibold">Actions</th>}
+              {columns.map((c) => <th key={c.key} className="whitespace-nowrap px-4 py-3 font-medium">{c.label}</th>)}
+              {actions && <th className="px-4 py-3 font-medium">Actions</th>}
             </tr>
           </thead>
           <tbody>
@@ -49,7 +49,7 @@ export default function DataTable({ columns, rows, searchKeys, pageSize = 10, ac
               <tr><td colSpan={columns.length + (actions ? 1 : 0)} className="px-4 py-10 text-center text-slate-400">{empty}</td></tr>
             )}
             {slice.map((row, i) => (
-              <tr key={row.id ?? i} className="border-t border-slate-100 hover:bg-slate-50">
+              <tr key={row.id ?? i} className="border-t border-navy-950/10 transition-colors duration-150 hover:bg-navy-950/[.04]">
                 {columns.map((c) => (
                   <td key={c.key} className="px-4 py-3 align-top">{c.render ? c.render(row, start + i) : row[c.key]}</td>
                 ))}
@@ -59,7 +59,7 @@ export default function DataTable({ columns, rows, searchKeys, pageSize = 10, ac
           </tbody>
         </table>
       </div>
-      <div className="flex items-center justify-between border-t border-slate-100 px-4 py-3 text-xs text-slate-500">
+      <div className="flex items-center justify-between border-t border-navy-950/10 px-4 py-3 text-xs text-slate-500">
         <span>{filtered.length ? `${start + 1}–${Math.min(start + pageSize, filtered.length)} of ${filtered.length}` : '0 results'}</span>
         <div className="flex items-center gap-2">
           <button className="btn-ghost !px-2 !py-1" disabled={page <= 1} onClick={() => setPage(page - 1)} aria-label="Previous page"><ChevronLeft size={14} /></button>

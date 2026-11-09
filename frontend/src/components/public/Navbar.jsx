@@ -5,6 +5,7 @@ import { asset, withFallback } from '../../api/assets';
 import { NAV } from '../../api/navConfig';
 import { getPage, downloadUrl } from '../../api/public';
 import useLive from '../../api/useLive';
+import useSettings from '../../api/useSettings';
 import avmlogo from "../../assets/logo-256.png";
 const LiveLabel = () => (
   <span className="flex items-center gap-1.5 rounded-full bg-red-600 px-3 py-1 text-xs font-bold tracking-wider text-white">
@@ -101,6 +102,9 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
   const nav = useNav();
+  const settings = useSettings();
+  const portal = settings.parent_portal_url;
+  const showEnquire = settings.enquire_button_visible !== 'false';
 
   const badges = (
     <>
@@ -116,8 +120,12 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-40 bg-navy-900/95 shadow-lg backdrop-blur">
       <div className="flex items-center justify-between gap-4 px-4 py-2 lg:px-8">
-        <Link to="/" onClick={close} className="shrink-0">
+        <Link to="/" onClick={close} className="flex min-w-0 shrink-0 items-center gap-3">
           <img src={avmlogo} alt="Adarsh Vidya Mandir" className="h-11 w-11 rounded-full object-cover" />
+          <span className="min-w-0 leading-tight 2xl:hidden">
+            <span className="block truncate text-base font-bold tracking-wide text-white">AVM</span>
+            <span className="block truncate text-[10px] font-medium uppercase tracking-[0.12em] text-gold-400">Adarsh Vidya Mandir</span>
+          </span>
         </Link>
 
         <nav className="hidden flex-1 items-center justify-center gap-4 xl:flex 2xl:gap-6">
@@ -132,6 +140,8 @@ export default function Navbar() {
         </nav>
 
         <div className="hidden items-center gap-3 2xl:flex">{badges}</div>
+        {portal && <a href={portal} target="_blank" rel="noopener noreferrer" className="hidden shrink-0 rounded-lg border border-gold-500/60 px-3 py-2 text-xs font-semibold text-gold-400 transition hover:bg-gold-500 hover:text-navy-950 xl:block">Parent Login</a>}
+        {showEnquire && <Link to="/admission/online-registration" className="hidden shrink-0 rounded-lg bg-gold-500 px-4 py-2 text-xs font-bold text-navy-950 transition hover:bg-gold-400 xl:block">Enquire Now</Link>}
 
         <button className="xl:hidden" onClick={() => setOpen(!open)} aria-label="Toggle menu" aria-expanded={open}>
           {open ? <X size={26} /> : <Menu size={26} />}
@@ -146,6 +156,8 @@ export default function Navbar() {
         <div className="min-h-0 overflow-hidden">
           <div className={`max-h-[80vh] overflow-y-auto border-t border-white/10 bg-navy-900 px-4 pb-4 transition duration-300 ease-out ${open ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'}`}>
             {nav.map((item) => <MobileItem key={item.label} item={item} close={close} />)}
+            {portal && <a href={portal} target="_blank" rel="noopener noreferrer" className="mt-3 block rounded-lg border border-gold-500/60 py-3 text-center text-sm font-semibold text-gold-400">Parent Login</a>}
+            {showEnquire && <Link to="/admission/online-registration" onClick={close} className="mt-3 block rounded-lg bg-gold-500 py-3 text-center text-sm font-bold text-navy-950">Enquire Now</Link>}
             <div className="mt-3 flex flex-wrap gap-2">{badges}</div>
           </div>
         </div>

@@ -72,6 +72,23 @@ export default function PageForm({ slug, fields = ['title', 'subtitle', 'banner_
           <div><label className="label">Message</label><textarea rows={6} className="field" value={form.incharge_message ?? ''} onChange={(e) => set('incharge_message', e.target.value)} /></div>
         </div>
       )}
+      {fields.includes('leaders') && (
+        <>
+          {[['headgirl', 'Head Girl', 'Head Girl'], ['incharge', 'In-charge', 'Student Leadership In-charge'], ['vice', 'Vice Captain', 'Vice Captain']].map(([k, title, role]) => (
+            <div key={k} className="space-y-3 rounded-lg border border-slate-200 p-3">
+              <h3 className="text-sm font-semibold text-navy-900">{title} message</h3>
+              {k === 'incharge' && <div><label className="label">Designation</label><input className="field" placeholder={role} value={form.incharge_role ?? ''} onChange={(e) => set('incharge_role', e.target.value)} /></div>}
+              <div><label className="label">Name</label><input className="field" value={form[`${k}_name`] ?? ''} onChange={(e) => set(`${k}_name`, e.target.value)} /></div>
+              <div><label className="label">Photo</label><ImageUpload aspect={1} value={form[`${k}_photo_url`] ?? ''} onChange={(u) => set(`${k}_photo_url`, u)} /></div>
+              <div><label className="label">Message</label><textarea rows={6} className="field" value={form[`${k}_message`] ?? ''} onChange={(e) => set(`${k}_message`, e.target.value)} /></div>
+            </div>
+          ))}
+          <div className="space-y-3 rounded-lg border border-slate-200 p-3">
+            <h3 className="text-sm font-semibold text-navy-900">Team photo</h3>
+            <ImageUpload aspect={16 / 9} value={form.team_photo_url ?? ''} onChange={(u) => set('team_photo_url', u)} />
+          </div>
+        </>
+      )}
       {fields.includes('is_active') && <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={form.is_active} onChange={(e) => set('is_active', e.target.checked)} /> Published</label>}
       <button className="btn-gold" disabled={busy}><Save size={16} /> {busy ? 'Saving…' : 'Save'}</button>
     </form>

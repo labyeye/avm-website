@@ -13,6 +13,17 @@ const TABS = [
       <p className="text-sm text-slate-600">Each slide is an image with its own text. Add as many as you like; they slide in the order shown. Use Order to rearrange.</p>
       <ItemsManager slug="home-hero" layout="slides" />
     </div>) },
+  { id: 'parent', label: 'Parent Info', render: () => (
+    <SettingsFields fields={[
+      { key: 'admission_button_visible', toggle: true, label: 'Show the red blinking "Admissions Open" button on the website', hint: 'Turn off to hide the button (and its popup form) on every page.' },
+      { key: 'enquire_button_visible', toggle: true, defaultOn: true, label: 'Show the gold "Enquire Now" button in the website menu bar', hint: 'Turn off to hide it from the top menu (desktop and mobile).' },
+      { key: 'admission_banner', label: 'Admissions banner text', hint: 'Shown on every page, e.g. "Admissions open for 2027-28". Leave empty to hide.' },
+      { key: 'parent_portal_url', label: 'Parent Login link', hint: 'Full URL of your ERP / parent portal. Leave empty to hide the button.' },
+      ...[1, 2, 3, 4, 5].flatMap((n) => [
+        { key: `stat${n}_value`, label: `Number ${n} (e.g. 1966)` },
+        { key: `stat${n}_label`, label: `Number ${n} label (e.g. Established)` },
+      ]),
+    ]} />) },
   { id: 'notices', label: 'Notice Ticker', render: () => <Notices embedded /> },
   { id: 'about', label: 'About', render: () => (
     <SettingsFields fields={[
@@ -53,7 +64,7 @@ export default function HomeAdmin() {
       <div className="mb-5 flex flex-wrap gap-2 border-b border-slate-200 pb-3">
         {TABS.map((t) => (
           <button key={t.id} onClick={() => setTab(t.id)}
-            className={`rounded-lg px-4 py-2 text-sm font-medium transition ${tab === t.id ? 'bg-gold-500 text-navy-950' : 'bg-white text-slate-600 hover:bg-slate-50'}`}>
+            className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${tab === t.id ? 'font-semibold text-navy-900 [box-shadow:var(--inset)]' : 'bg-white text-slate-600 hover:text-navy-950'}`}>
             {t.label}
           </button>
         ))}

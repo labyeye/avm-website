@@ -4,7 +4,8 @@ require_once __DIR__ . '/../../middleware/auth.php';
 const SETTING_KEYS = ['hero_heading', 'about_text', 'contact_email', 'contact_phone', 'address', 'facebook_url', 'instagram_url', 'youtube_url',
     'hero_image', 'about_heading', 'about_subheading', 'gallery_heading', 'gallery_subheading',
     'gallery_columns', 'gallery_scroll', 'gallery_height', 'admission_heading', 'admission_subheading', 'testimonials_heading', 'testimonials_subheading',
-    'live_active', 'live_url', 'live_title'];
+    'admission_banner', 'parent_portal_url', 'stat1_value', 'stat1_label', 'stat2_value', 'stat2_label', 'stat3_value', 'stat3_label', 'stat4_value', 'stat4_label', 'stat5_value', 'stat5_label',
+    'live_active', 'live_url', 'live_title', 'admission_button_visible', 'enquire_button_visible'];
 $method = $_SERVER['REQUEST_METHOD'];
 
 try {

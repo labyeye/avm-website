@@ -20,6 +20,15 @@ export const NAV = [
     ]),
   },
   {
+    label: 'Admission', to: '/admission',
+    children: sub('admission', [
+      ['Procedure', 'procedure'],
+      ['Online Registration', 'online-registration'],
+      ['Age Criteria', 'age-criteria'],
+      ['Fee Structure', 'fee-structure'],
+    ]),
+  },
+  {
     label: 'Academics', to: '/academics',
     children: sub('academics', [
       ['Curriculum', 'curriculum'],
@@ -36,32 +45,15 @@ export const NAV = [
     ]).concat([{ label: 'Events', to: '/events' }]),
   },
   {
-    label: 'Downloads', to: '/downloads',
-    children: sub('downloads', [
-      ['Annual Calendar 2026-2027', 'annual-calendar'],
-      ['E-Brochure', 'e-brochure'],
-      ['Newsletter', 'newsletter'],
-    ]),
-  },
-  {
     label: 'House System', to: '/pastoral',
     children: sub('pastoral/house-system', [
       ['Knowledge House', 'knowledge-house'],
-      ['Wonder House', 'wonder-house'],
+      ['Wisdom House', 'wonder-house'],
       ['Intelligence House', 'intelligent-house'],
       ['Confidence House', 'confidence-house'],
     ]),
   },
-  // Dropdown is built from the documents on this page (Admin → Public Disclosure → Documents); clicking one downloads the file.
-  { label: 'Public Disclosure', to: '/public-disclosure', dynamicFrom: 'public-disclosure' },
+  { label: 'Public Disclosure', to: '/public-disclosure' },
   { label: 'Alumni', to: '/alumni' },
-  {
-    label: 'Admission', to: '/admission',
-    children: sub('admission', [
-      ['Procedure', 'procedure'],
-      ['Online Registration', 'online-registration'],
-      ['Fee Structure', 'fee-structure'],
-    ]),
-  },
   { label: 'Contact Us', to: '/contact-us' },
 ];

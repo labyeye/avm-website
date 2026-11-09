@@ -39,6 +39,9 @@ function buildTabs(slug, layout) {
   if (layout === 'sports') {
     tabs.splice(2, 0, { id: 'incharge', label: 'In-charge Message', render: () => <PageForm slug={slug} fields={['incharge_message']} /> });
   }
+  if (layout === 'leadership') {
+    tabs.splice(2, 0, { id: 'messages', label: 'Leader Messages & Team Photo', render: () => <PageForm slug={slug} fields={['leaders']} /> });
+  }
   if (layout === 'contact') {
     tabs.push({ id: 'details', label: 'Contact Details', render: () => (
       <div className="space-y-2">
@@ -79,7 +82,7 @@ export default function PageAdmin() {
           <div className="mb-5 flex flex-wrap items-center gap-2 border-b border-slate-200 pb-3">
             {tabs.map((t) => (
               <button key={t.id} onClick={() => setTab(t.id)}
-                className={`rounded-lg px-4 py-2 text-sm font-medium transition ${current.id === t.id ? 'bg-gold-500 text-navy-950' : 'bg-white text-slate-600 hover:bg-slate-50'}`}>
+                className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${current.id === t.id ? 'font-semibold text-navy-900 [box-shadow:var(--inset)]' : 'bg-white text-slate-600 hover:text-navy-950'}`}>
                 {t.label}
               </button>
             ))}

@@ -1,19 +1,20 @@
-const COLORS = {
-  blue: 'bg-blue-100 text-blue-600',
-  green: 'bg-emerald-100 text-emerald-600',
-  purple: 'bg-purple-100 text-purple-600',
-  orange: 'bg-orange-100 text-orange-600',
+const TONES = {
+  navy: 'text-navy-900',
+  gold: 'text-gold-600',
+  blue: 'text-navy-600',
+  slate: 'text-slate-600',
 };
 
-export default function StatCard({ icon: Icon, label, value, color = 'blue' }) {
+// Soft raised tile: icon in a pressed-in disc, big figure, label.
+export default function StatCard({ icon: Icon, label, value, tone = 'navy' }) {
   return (
-    <div className="flex items-center gap-4 rounded-xl bg-white p-5 shadow-sm">
-      <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${COLORS[color]}`}>
-        <Icon size={24} />
-      </div>
+    <div className="tile flex items-center gap-4 rounded-2xl p-5">
+      <span className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full [box-shadow:var(--inset)] ${TONES[tone]}`}>
+        <Icon size={22} strokeWidth={1.75} />
+      </span>
       <div>
-        <div className="text-2xl font-bold text-slate-800">{value ?? '–'}</div>
-        <div className="text-sm text-slate-500">{label}</div>
+        <div className="text-3xl font-semibold tabular-nums leading-none text-navy-950">{value ?? '–'}</div>
+        <div className="mt-1.5 text-sm text-slate-600">{label}</div>
       </div>
     </div>
   );

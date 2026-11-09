@@ -233,25 +233,49 @@ function MasonryGallery({ urls, title }) {
   );
 }
 
-// Sports in-charge: photo + message shown above the sport cards.
-function InCharge({ page }) {
-  if (!page.incharge_message && !page.incharge_name) return null;
+// Photo + message block (sports in-charge, student leaders). `prefix` picks the page fields, e.g. "incharge" -> incharge_name.
+function PersonMessage({ page, prefix = "incharge", role, fallbackAlt = "Photo" }) {
+  const name = page[`${prefix}_name`];
+  const message = page[`${prefix}_message`];
+  const photo = page[`${prefix}_photo_url`];
+  const title = role ?? page[`${prefix}_role`];
+  if (!message && !name) return null;
   return (
     <Reveal from="up">
       <div className="mt-2 grid items-center gap-8 rounded-2xl bg-white/10 p-6 md:grid-cols-[220px_1fr]">
         <div className="text-center">
           <ZoomImage
-            src={page.incharge_photo_url || placeholder(400, 400, "Photo", "16346b")}
-            alt={page.incharge_name || "In-charge"}
+            src={photo || placeholder(400, 400, "Photo", "16346b")}
+            alt={name || fallbackAlt}
             onError={imgFallback(400, 400, "Photo")}
             className="mx-auto aspect-square w-48 rounded-full border-2 border-gold-500 object-cover object-top"
           />
-          {page.incharge_name && <h3 className="mt-3 text-lg font-semibold">{page.incharge_name}</h3>}
-          {page.incharge_role && <p className="text-xs uppercase tracking-wide text-gold-400">{page.incharge_role}</p>}
+          {name && <h3 className="mt-3 text-lg font-semibold">{name}</h3>}
+          {title && <p className="text-xs uppercase tracking-wide text-gold-400">{title}</p>}
         </div>
-        <RichText text={page.incharge_message} className="text-[15px]" />
+        <RichText text={message} className="text-[15px]" />
       </div>
     </Reveal>
+  );
+}
+const InCharge = ({ page }) => <PersonMessage page={page} prefix="incharge" fallbackAlt="In-charge" />;
+
+// Student Leadership: Head Girl, In-charge, Vice Captain messages, then the team photo.
+function LeaderMessages({ page }) {
+  return (
+    <div className="space-y-6">
+      <PersonMessage page={page} prefix="headgirl" role="Head Girl" />
+      <PersonMessage page={page} prefix="incharge" />
+      <PersonMessage page={page} prefix="vice" role="Vice Captain" />
+      {page.team_photo_url && (
+        <Reveal from="up">
+          <figure className="mt-2">
+            <ZoomImage src={page.team_photo_url} alt={`${page.title} team`} onError={imgFallback(1200, 675, "Team photo")} className="w-full rounded-2xl object-cover" />
+            <figcaption className="mt-2 text-center text-sm text-white/70">Our Student Leadership Team</figcaption>
+          </figure>
+        </Reveal>
+      )}
+    </div>
   );
 }
 
@@ -623,6 +647,7 @@ export default function DynamicPage() {
         )}
         {L === "members" && <Members items={page.items} />}
         {L === "sports" && <InCharge page={page} />}
+        {L === "leadership" && <LeaderMessages page={page} />}
         {L === "achievements" && <Achievements items={page.items} />}
         {(L === "sports" || L === "leadership") && (
           <DetailCards items={page.items} kind={L} />

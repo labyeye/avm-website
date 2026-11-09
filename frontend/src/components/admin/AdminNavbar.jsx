@@ -7,7 +7,7 @@ export default function AdminNavbar({ title, onMenu }) {
   const navigate = useNavigate();
 
   return (
-    <header className="sticky top-0 z-20 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 text-slate-800 md:px-6">
+    <header className="sticky top-0 z-20 flex items-center justify-between bg-white px-4 py-3 text-navy-950 md:px-6">
       <div className="flex items-center gap-3">
         <button className="lg:hidden" onClick={onMenu} aria-label="Open menu"><Menu size={22} /></button>
         <h1 className="text-lg font-semibold">{title}</h1>

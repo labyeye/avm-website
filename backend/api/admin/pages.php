@@ -3,7 +3,7 @@ require_once __DIR__ . '/../../middleware/auth.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 $slug = (string)($_GET['slug'] ?? '');
-const PAGE_FIELDS = ['title', 'subtitle', 'banner_url', 'image_url', 'file_url', 'file_label', 'body', 'incharge_name', 'incharge_role', 'incharge_photo_url', 'incharge_message'];
+const PAGE_FIELDS = ['title', 'subtitle', 'banner_url', 'image_url', 'file_url', 'file_label', 'body', 'incharge_name', 'incharge_role', 'incharge_photo_url', 'incharge_message', 'headgirl_name', 'headgirl_photo_url', 'headgirl_message', 'vice_name', 'vice_photo_url', 'vice_message', 'team_photo_url'];
 
 try {
     $pdo = db();

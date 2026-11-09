@@ -5,7 +5,7 @@ import AdminNavbar from './AdminNavbar';
 export default function AdminLayout({ title, children }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="min-h-screen bg-slate-100 text-slate-800">
+    <div className="admin min-h-screen text-navy-950">
       <Sidebar open={open} onClose={() => setOpen(false)} />
       <div className="lg:pl-64">
         <AdminNavbar title={title} onMenu={() => setOpen(true)} />
